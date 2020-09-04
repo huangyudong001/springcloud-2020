@@ -17,3 +17,16 @@ eureka:
 
 
 
+ribbon:
+  #指的是室立连接后从服务器读取到可用资源所用的时间f
+  ReadTimeout:  5000
+  #没置feign客户髋超旳时ri( openFeign.默认支持ribbor)
+  ConnectTimeout: 5000
+
+# 开启feign日志
+logging:
+  level:
+    com.atguigu.springcloud.service.PaymentFeignService: debug
+
+
+
