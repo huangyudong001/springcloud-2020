@@ -5,6 +5,7 @@ spring:
   application:
     name: cloud-config-center
   cloud:
+    #Config服务端配置
     config:
       server:
         git:
