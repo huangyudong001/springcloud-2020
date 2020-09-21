@@ -42,48 +42,54 @@ public class OrderController {
     @Autowired
     private DiscoveryClient discoveryClient;
 
-//    private static final String PAYMENT_URL = "http://localhost:8001";
+    //    private static final String PAYMENT_URL = "http://localhost:8001";
     // 注册在eureka上的地址
     private static final String PAYMENT_URL = "http://CLOUD-PAYMENT-SERVICE";
 
     @GetMapping("/insert")
-    public Object insert(Payment payment){
+    public Object insert(Payment payment) {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> request =new HttpEntity<>(payment,httpHeaders);
-        ResponseEntity<Object> response =restTemplate.postForEntity(PAYMENT_URL+"/payment/insert",request,Object.class);
+        HttpEntity<Object> request = new HttpEntity<>(payment, httpHeaders);
+        ResponseEntity<Object> response = restTemplate.postForEntity(PAYMENT_URL + "/payment/insert", request, Object.class);
         return response.getBody();
     }
 
     @GetMapping("/postObject")
-    public CommonResult postObject(Payment payment){
-        return restTemplate.postForObject(PAYMENT_URL+"/payment/insert",payment,CommonResult.class);
+    public CommonResult postObject(Payment payment) {
+        return restTemplate.postForObject(PAYMENT_URL + "/payment/insert", payment, CommonResult.class);
     }
 
     @GetMapping("/getPaymentById/{id}")
-    public CommonResult getPaymentById(@PathVariable("id") Long id){
-        return restTemplate.getForObject(PAYMENT_URL+"/payment/getPaymentById/"+id, CommonResult.class);
+    public CommonResult getPaymentById(@PathVariable("id") Long id) {
+        return restTemplate.getForObject(PAYMENT_URL + "/payment/getPaymentById/" + id, CommonResult.class);
     }
 
     @GetMapping("/getForEntity/{id}")
-    public CommonResult getForEntity(@PathVariable("id") Long id){
+    public CommonResult getForEntity(@PathVariable("id") Long id) {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> request =new HttpEntity<>(id,httpHeaders);
-        ResponseEntity<CommonResult> respose = restTemplate.getForEntity(PAYMENT_URL+"/payment/getPaymentById/"+id, CommonResult.class);
-        if (respose.getStatusCode().is2xxSuccessful()){
+        HttpEntity<Object> request = new HttpEntity<>(id, httpHeaders);
+        ResponseEntity<CommonResult> respose = restTemplate.getForEntity(PAYMENT_URL + "/payment/getPaymentById/" + id, CommonResult.class);
+        if (respose.getStatusCode().is2xxSuccessful()) {
             return respose.getBody();
         }
-        return new CommonResult(444,"操作失败");
+        return new CommonResult(444, "操作失败");
     }
 
     @GetMapping(value = "/payment/lb")
-    public String getPaymentLB(){
+    public String getPaymentLB() {
         List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
-        if (instances == null || instances.size() <= 0){
+        if (instances == null || instances.size() <= 0) {
             return null;
         }
         ServiceInstance serviceInstance = loadBalancer.instances(instances);
         URI uri = serviceInstance.getUri();
-        return restTemplate.getForObject(uri+"/payment/lb",String.class);
+        return restTemplate.getForObject(uri + "/payment/lb", String.class);
     }
+
+    @GetMapping(value = "/payment/zipkin")
+    public String paymentZipkin() {
+        return restTemplate.getForObject(PAYMENT_URL + "/payment/zipkin", String.class);
+    }
+
 
 }
