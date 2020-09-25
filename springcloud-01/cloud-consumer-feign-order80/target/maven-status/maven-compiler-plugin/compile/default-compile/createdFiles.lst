@@ -1,0 +1,4 @@
+com\hyd\springcloud\config\FeignConfig.class
+com\hyd\springcloud\controller\OrderFeignController.class
+com\hyd\springcloud\server\OrderFeignService.class
+com\hyd\springcloud\OrderFeignMain80.class

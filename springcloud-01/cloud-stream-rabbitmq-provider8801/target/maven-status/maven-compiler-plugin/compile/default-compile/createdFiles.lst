@@ -1,0 +1,4 @@
+com\hyd\springcloud\controller\SendMessageController.class
+com\hyd\springcloud\service\impl\MessageProviderImpl.class
+com\hyd\springcloud\service\IMessageProvider.class
+com\hyd\springcloud\StreamProviderMain8801.class
